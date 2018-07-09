@@ -8,13 +8,9 @@
 #include <fstream>
 #include <streambuf>
 
-ClassCreateUtility::ClassCreateUtility(const std::string &outputFolder,
-                                       const std::string &outputType,
-                                       const std::string &templateFile) :
-        outputFolder(outputFolder),
-        sourceType(outputType) {
-
-    std::ifstream t(templateFile);
+ClassCreateUtility::ClassCreateUtility(const Setting &setting) :
+        setting(setting) {
+    std::ifstream t(setting.templateFile);
     templateFileContents = std::string(std::istreambuf_iterator<char>(t), std::istreambuf_iterator<char>());
 }
 
@@ -53,9 +49,9 @@ void ClassCreateUtility::saveClass(const json &contents, const std::string &clas
     std::string renderedFile = environment.render(templateFileContents, templateData);
 
     // Write class to file.
-    auto filename = outputFolder + templateData.at("className").get<std::string>() + "." + sourceType;
+    auto filename = setting.outputFolder + templateData.at("className").get<std::string>() + "." + setting.outputType;
 
-    if(!doesFileExist(filename) || isDataModel) {
+    if (!doesFileExist(filename) || isDataModel) {
         std::ofstream output_file(filename);
         output_file << renderedFile;
     }
@@ -88,7 +84,7 @@ void ClassCreateUtility::classNameFromFile(const std::string &file, std::string 
 }
 
 bool ClassCreateUtility::doesFileExist(const std::string &name) {
-    if (FILE *file = fopen(name.c_str(), "r")) {
+    if (auto file = fopen(name.c_str(), "r")) {
         fclose(file);
         return true;
     } else {
@@ -102,7 +98,9 @@ void ClassCreateUtility::populateTemplateContents(json &templateData, const json
 
     for (auto property = contents.at("properties").begin(); property != contents.at("properties").end(); ++property) {
         auto type = std::string("string");
+        auto variableName = property.key();
         auto isArray = false;
+        auto isUnknownObject = false;
         try {
             type = property.value().at("type");
             if (type.compare("object") == 0) {
@@ -111,22 +109,27 @@ void ClassCreateUtility::populateTemplateContents(json &templateData, const json
                 type = propertyName;
             }
             if (type.compare("array") == 0) {
-                auto arrayType = property.value().at("items").at("type").get<std::string>();
+                type = property.value().at("items").at("type").get<std::string>();
                 isArray = true;
-                if (arrayType.compare("object") == 0) {
+                if (type.compare("object") == 0) {
                     auto propertyName = property.key();
                     classNameFromProperty(propertyName);
                     type = propertyName;
                 }
             }
         } catch (json::exception &e) {
+            try {
+                isUnknownObject = true;
+                type = "object";
+            } catch (json::exception &e) {}
         }
         templateData.at("properties").push_back({
-                                                        {"type",         type},
-                                                        {"description",  property.value().at("description")},
-                                                        {"isArray",      isArray},
-                                                        {"isString",     type.compare("string") == 0},
-                                                        {"variableName", property.key()}
+                                                        {"type",            type},
+                                                        {"description",     property.value().at("description")},
+                                                        {"isArray",         isArray},
+                                                        {"isUnknownObject", isUnknownObject},
+                                                        {"isString",        type.compare("string") == 0},
+                                                        {"variableName",    variableName}
                                                 });
     }
 }

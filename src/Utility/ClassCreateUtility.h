@@ -7,23 +7,22 @@
 
 #include <nlohmann/json.hpp>
 #include <inja.hpp>
+#include "../Model/Setting.h"
 
 using namespace inja;
 using json = nlohmann::json;
 
 class ClassCreateUtility {
 public:
-    explicit ClassCreateUtility(const std::string &outputFolder,
-                                const std::string &outputType,
-                                const std::string &templateFile);
+    explicit ClassCreateUtility(const Setting &setting);
 
     void writeClass(const json &contents, const std::string &className, const bool isDataModel);
 
     void classNameFromFile(const std::string &file, std::string &className);
 
 private:
-    const std::string outputFolder;
-    const std::string sourceType;
+
+    const Setting &setting;
     Environment environment = Environment();
     std::string templateFileContents;
 

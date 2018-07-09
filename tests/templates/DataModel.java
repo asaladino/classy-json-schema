@@ -22,7 +22,8 @@ public class {{ className }} {% if isDataModel %}extends BaseModel{% else %}{% e
          * {{ value/description }}
          */
         @Getter
-        @Setter
+        @Setter{% if value/isUnknownObject %}
+        private Object {{ value/variableName }};{% else %}
         private {% if value/isString %}String{% else %}{{ value/type }}{% endif %} {{ value/variableName }};
-    {% endif %}{% endfor %}
+    {% endif %}{% endif %}{% endfor %}
 }

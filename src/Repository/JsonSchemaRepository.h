@@ -8,22 +8,23 @@
 
 #include <string>
 #include <nlohmann/json.hpp>
+#include "../Model/Setting.h"
 
 using json = nlohmann::json;
 
 class JsonSchemaRepository {
 
 public:
-    explicit JsonSchemaRepository(const std::string &folder);
+    explicit JsonSchemaRepository(const Setting &setting);
 
     std::vector<std::string> findAllFiles();
 
     json fileAsJson(const std::string &file);
 
-    std::string &getFolder();
+    bool isJson(const std::string &str);
 
 private:
-    std::string folder;
+    Setting setting;
 };
 
 
