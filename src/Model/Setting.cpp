@@ -20,19 +20,19 @@ Setting::Setting(std::string &templateFile,
 void Setting::build(int argc, char **argv) {
     for (int i = 0; i < argc; i++) {
         std::string argValue(argv[i]);
-        if (argValue.compare("--templateFile") == 0) {
+        if (argValue == "--templateFile") {
             templateFile = std::string(argv[i + 1]);
         }
-        if (argValue.compare("--schemaFolder") == 0) {
+        if (argValue == "--schemaFolder") {
             schemaFolder = std::string(argv[i + 1]);
         }
-        if (argValue.compare("--outputFolder") == 0) {
+        if (argValue == "--outputFolder") {
             outputFolder = std::string(argv[i + 1]);
         }
-        if (argValue.compare("--outputType") == 0) {
+        if (argValue == "--outputType") {
             outputType = std::string(argv[i + 1]);
         }
-        if (argValue.compare("--cli") == 0) {
+        if (argValue == "--cli") {
             useCli = true;
         }
     }

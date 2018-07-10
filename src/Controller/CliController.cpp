@@ -18,16 +18,16 @@ int CliController::run() {
     // Creating class generator utility.
     ClassCreateUtility classCreateUtility(setting);
 
-    std::cout << "Template File: \t" << setting.templateFile << std::endl;
-    std::cout << "Schema Folder: \t" << setting.schemaFolder << std::endl;
-    std::cout << "Output Folder: \t" << setting.outputFolder << std::endl;
-    std::cout << "Output Type: \t" << setting.outputType << std::endl;
-    std::cout << "Schema Found: \t" << files.size() << std::endl;
+    std::cout << "Template File: \t" << setting.templateFile << '\n';
+    std::cout << "Schema Folder: \t" << setting.schemaFolder << '\n';
+    std::cout << "Output Folder: \t" << setting.outputFolder << '\n';
+    std::cout << "Output Type: \t" << setting.outputType << '\n';
+    std::cout << "Schema Found: \t" << files.size() << '\n';
 
     std::cout << "\nGenerating Classes For..." << std::endl;
 
-    for (auto file : files) {
-        std::cout << file << std::endl;
+    for (const auto &file : files) {
+        std::cout << file << '\n';
 
         std::string className;
         classCreateUtility.classNameFromFile(file, className);

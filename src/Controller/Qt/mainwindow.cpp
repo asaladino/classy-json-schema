@@ -58,9 +58,9 @@ void MainWindow::start() {
     ClassCreateUtility classCreateUtility(setting);
 
     int progress = 1;
-    int max = static_cast<int>(files.size());
+    auto max = static_cast<int>(files.size());
 
-    for (auto file : files) {
+    for (const auto &file : files) {
         std::string className;
         classCreateUtility.classNameFromFile(file, className);
         auto json = jsonSchemaRepository.fileAsJson(file);

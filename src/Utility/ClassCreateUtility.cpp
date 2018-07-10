@@ -20,14 +20,14 @@ void ClassCreateUtility::writeClass(const json &contents, const std::string &cla
         auto type = std::string("string");
         try {
             type = property.value().at("type");
-            if (type.compare("object") == 0) {
+            if (type == "object") {
                 auto propertyName = property.key();
                 classNameFromProperty(propertyName);
                 writeClass(property.value(), propertyName, false);
             }
-            if (type.compare("array") == 0) {
+            if (type == "array") {
                 auto arrayType = property.value().at("items").at("type").get<std::string>();
-                if (arrayType.compare("object") == 0) {
+                if (arrayType == "object") {
                     auto propertyName = property.key();
                     classNameFromProperty(propertyName);
                     writeClass(property.value().at("items"), propertyName, false);
@@ -103,15 +103,15 @@ void ClassCreateUtility::populateTemplateContents(json &templateData, const json
         auto isUnknownObject = false;
         try {
             type = property.value().at("type");
-            if (type.compare("object") == 0) {
+            if (type == "object") {
                 auto propertyName = property.key();
                 classNameFromProperty(propertyName);
                 type = propertyName;
             }
-            if (type.compare("array") == 0) {
+            if (type == "array") {
                 type = property.value().at("items").at("type").get<std::string>();
                 isArray = true;
-                if (type.compare("object") == 0) {
+                if (type == "object") {
                     auto propertyName = property.key();
                     classNameFromProperty(propertyName);
                     type = propertyName;
@@ -128,7 +128,7 @@ void ClassCreateUtility::populateTemplateContents(json &templateData, const json
                                                         {"description",     property.value().at("description")},
                                                         {"isArray",         isArray},
                                                         {"isUnknownObject", isUnknownObject},
-                                                        {"isString",        type.compare("string") == 0},
+                                                        {"isString",        type == "string"},
                                                         {"variableName",    variableName}
                                                 });
     }
