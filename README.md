@@ -6,7 +6,17 @@ Generate PO&lt;T>O's for any language using a template file.
 
 ## Requirements
 - Hunter
+- Qt
+- cmake
 
+## Build
+```
+git clone https://github.com/asaladino/classy-json-schema.git
+cd classy-json-schema
+cmake .
+make
+./classy_json_schema 
+```
 
 ## Parameters
 ```
