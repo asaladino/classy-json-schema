@@ -12,6 +12,10 @@ class Setting {
 
 public:
 
+    Setting() = default;
+
+    Setting(int argc, char **argv);
+
     Setting(std::string &templateFile,
             std::string &schemaFolder,
             std::string &outputFolder,
@@ -20,11 +24,11 @@ public:
 
     void build(int argc, char *argv[]);
 
-    std::string &templateFile;
-    std::string &schemaFolder;
-    std::string &outputFolder;
-    std::string &outputType;
-    bool useCli;
+    mutable std::string templateFile;
+    mutable std::string schemaFolder;
+    mutable std::string outputFolder;
+    mutable std::string outputType;
+    mutable bool useCli = false;
 };
 
 

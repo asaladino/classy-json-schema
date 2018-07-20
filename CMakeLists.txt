@@ -22,6 +22,11 @@ find_package(Qt5Widgets CONFIG REQUIRED)
 hunter_add_package(inja)
 find_package(inja CONFIG REQUIRED)
 
+# download boost
+hunter_add_package(Boost COMPONENTS system filesystem)
+# now boost can be used
+find_package(Boost CONFIG REQUIRED system filesystem)
+
 add_executable(classy_json_schema
         src/main.cpp
         src/Controller/Qt/mainwindow.cpp
@@ -36,6 +41,10 @@ add_executable(classy_json_schema
         src/Controller/CliController.cpp
         src/Controller/CliController.h
         src/Controller/GuiController.cpp
-        src/Controller/GuiController.h)
+        src/Controller/GuiController.h src/Utility/FileValidator.cpp src/Utility/FileValidator.h)
 
-target_link_libraries(classy_json_schema Qt5::Widgets inja::inja)
+target_link_libraries(classy_json_schema
+        Qt5::Widgets
+        inja::inja
+        Boost::filesystem
+        Boost::system)

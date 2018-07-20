@@ -13,10 +13,11 @@ using namespace inja;
 using json = nlohmann::json;
 
 class ClassCreateUtility {
+
 public:
     explicit ClassCreateUtility(const Setting &setting);
 
-    void writeClass(const json &contents, const std::string &className, const bool isDataModel);
+    void writeClass(const json &contents, const std::string &className, bool isDataModel);
 
     void classNameFromFile(const std::string &file, std::string &className);
 
@@ -26,9 +27,7 @@ private:
     Environment environment = Environment();
     std::string templateFileContents;
 
-    bool doesFileExist(const std::string &name);
-
-    void saveClass(const json &contents, const std::string &className, const bool isDataModel);
+    void saveClass(const json &contents, const std::string &className, bool isDataModel);
 
     void classNameFromProperty(std::string &propertyName);
 

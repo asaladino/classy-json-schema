@@ -71,10 +71,18 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="lineEditOutputFolder"/>
+       <widget class="QLineEdit" name="lineEditOutputFolder">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="lineEditTemplateFile"/>
+       <widget class="QLineEdit" name="lineEditTemplateFile">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label">
@@ -126,7 +134,11 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEditSchemaFolder"/>
+       <widget class="QLineEdit" name="lineEditSchemaFolder">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1">
        <widget class="QLineEdit" name="lineEditType"/>
@@ -167,7 +179,7 @@
      <x>0</x>
      <y>0</y>
      <width>500</width>
-     <height>22</height>
+     <height>28</height>
     </rect>
    </property>
   </widget>

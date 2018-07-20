@@ -3,19 +3,12 @@
 #include "Controller/GuiController.h"
 
 int main(int argc, char *argv[]) {
-    std::string templateFile;
-    std::string schemaFolder;
-    std::string outputFolder;
-    std::string outputType;
-    bool useCli = false;
-    Setting setting(templateFile, schemaFolder, outputFolder, outputType, useCli);
-    setting.build(argc, argv);
-
+    auto setting = Setting(argc, argv);
     if (setting.useCli) {
-        CliController cliController(setting);
+        auto cliController = CliController(setting);
         return cliController.run();
     } else {
-        GuiController guiController(setting);
+        auto guiController = GuiController(setting);
         return guiController.run(argc, argv);
     }
 }

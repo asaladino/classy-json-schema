@@ -2,6 +2,7 @@
 // Created by Adam Saladino on 7/2/18.
 //
 
+#include <iostream>
 #include "CliController.h"
 #include "../Repository/JsonSchemaRepository.h"
 #include "../Utility/ClassCreateUtility.h"
@@ -12,11 +13,11 @@ CliController::CliController(const Setting &setting) :
 
 int CliController::run() {
     // Find all json schema files.
-    JsonSchemaRepository jsonSchemaRepository(setting);
+    auto jsonSchemaRepository = JsonSchemaRepository(setting);
     auto files = jsonSchemaRepository.findAllFiles();
 
     // Creating class generator utility.
-    ClassCreateUtility classCreateUtility(setting);
+    auto classCreateUtility = ClassCreateUtility(setting);
 
     std::cout << "Template File: \t" << setting.templateFile << '\n';
     std::cout << "Schema Folder: \t" << setting.schemaFolder << '\n';
@@ -26,10 +27,9 @@ int CliController::run() {
 
     std::cout << "\nGenerating Classes For..." << std::endl;
 
+    auto className = std::string();
     for (const auto &file : files) {
         std::cout << file << '\n';
-
-        std::string className;
         classCreateUtility.classNameFromFile(file, className);
         auto json = jsonSchemaRepository.fileAsJson(file);
         classCreateUtility.writeClass(json, className, true);

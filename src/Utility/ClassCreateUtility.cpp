@@ -7,6 +7,9 @@
 #include "ClassCreateUtility.h"
 #include <fstream>
 #include <streambuf>
+#include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
 
 ClassCreateUtility::ClassCreateUtility(const Setting &setting) :
         setting(setting) {
@@ -14,7 +17,7 @@ ClassCreateUtility::ClassCreateUtility(const Setting &setting) :
     templateFileContents = std::string(std::istreambuf_iterator<char>(t), std::istreambuf_iterator<char>());
 }
 
-void ClassCreateUtility::writeClass(const json &contents, const std::string &className, const bool isDataModel) {
+void ClassCreateUtility::writeClass(const json &contents, const std::string &className, bool isDataModel) {
     saveClass(contents, className, isDataModel);
     for (auto property = contents.at("properties").begin(); property != contents.at("properties").end(); ++property) {
         auto type = std::string("string");
@@ -38,21 +41,23 @@ void ClassCreateUtility::writeClass(const json &contents, const std::string &cla
     }
 }
 
-void ClassCreateUtility::saveClass(const json &contents, const std::string &className, const bool isDataModel) {
+void ClassCreateUtility::saveClass(const json &contents, const std::string &className, bool isDataModel) {
     // Generating template data.
-    json templateData;
+    auto templateData = json();
     templateData["className"] = className;
     templateData["isDataModel"] = isDataModel;
     populateTemplateContents(templateData, contents);
 
     // Populating template with data.
-    std::string renderedFile = environment.render(templateFileContents, templateData);
+    auto renderedFile = environment.render(templateFileContents, templateData);
 
     // Write class to file.
-    auto filename = setting.outputFolder + templateData.at("className").get<std::string>() + "." + setting.outputType;
+    fs::path path(setting.outputFolder);
+    fs::path outputFile(templateData.at("className").get<std::string>() + "." + setting.outputType);
+    fs::path fullPath = path / outputFile;
 
-    if (!doesFileExist(filename) || isDataModel) {
-        std::ofstream output_file(filename);
+    if (!boost::filesystem::exists(fullPath)) {
+        auto output_file = std::ofstream(fullPath);
         output_file << renderedFile;
     }
 }
@@ -64,7 +69,7 @@ void ClassCreateUtility::classNameFromProperty(std::string &propertyName) {
 
 
 void ClassCreateUtility::classNameFromFile(const std::string &file, std::string &className) {
-    bool active = true;
+    auto active = true;
     className = std::regex_replace(file, std::regex(R"(\.json)"), " ");
     className = std::regex_replace(className, std::regex(R"(\-)"), " ");
 
@@ -81,15 +86,6 @@ void ClassCreateUtility::classNameFromFile(const std::string &file, std::string 
         }
     }
     className = std::regex_replace(className, std::regex(R"(\s)"), "");
-}
-
-bool ClassCreateUtility::doesFileExist(const std::string &name) {
-    if (auto file = fopen(name.c_str(), "r")) {
-        fclose(file);
-        return true;
-    } else {
-        return false;
-    }
 }
 
 void ClassCreateUtility::populateTemplateContents(json &templateData, const json &contents) {

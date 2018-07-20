@@ -4,6 +4,7 @@
 
 #include "Setting.h"
 
+
 Setting::Setting(std::string &templateFile,
                  std::string &schemaFolder,
                  std::string &outputFolder,
@@ -36,4 +37,8 @@ void Setting::build(int argc, char **argv) {
             useCli = true;
         }
     }
+}
+
+Setting::Setting(int argc, char **argv) {
+    this->build(argc, argv);
 }
