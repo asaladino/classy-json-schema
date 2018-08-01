@@ -1,6 +1,6 @@
 # Classy Json Schema
 
-Generate PO&lt;T>O's for any language using a template file.
+Generate PO&lt;T>O's for any language using a template file. This project is done. I created a kotlin version that is much faster and has better cross platform support. https://github.com/asaladino/klassy-json-schema
 
 ![Classy Json Schema](docs/main-window.png "Classy Json Schema")
 
